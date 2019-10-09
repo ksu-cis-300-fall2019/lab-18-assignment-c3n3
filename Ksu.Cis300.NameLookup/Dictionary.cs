@@ -1,5 +1,5 @@
 ﻿/* Dictionary.cs
- * Author: Rod Howell
+ * Author: Caden Churchman
  */
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,85 @@ namespace Ksu.Cis300.NameLookup
         /// The keys and values in the dictionary.
         /// </summary>
         private BinaryTreeNode<KeyValuePair<TKey, TValue>> _elements = null;
+
+        /// <summary>
+        /// removes the lowest value key from tree
+        /// </summary>
+        /// <param name="t"> the tree </param>
+        /// <param name="min"> the removed thing </param>
+        /// <returns></returns>
+        private static BinaryTreeNode<KeyValuePair<TKey, TValue>> RemoveMininumKey(BinaryTreeNode<KeyValuePair<TKey, TValue>> t, out KeyValuePair<TKey, TValue> min)
+        {
+            if (t.LeftChild == null)
+            {
+                min = t.Data;
+                return t;
+            }
+            BinaryTreeNode<KeyValuePair<TKey, TValue>> newTree = new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, RemoveMininumKey(t.LeftChild, out min), t.RightChild);
+            return newTree;
+        }
+
+        /// <summary>
+        /// remove thjing from tree
+        /// </summary>
+        /// <param name="key"> the key </param>
+        /// <param name="t"> the tree </param>
+        /// <param name="removed"> the removed bool </param>
+        /// <returns></returns>
+        private static BinaryTreeNode<KeyValuePair<TKey, TValue>> Remove(TKey key, BinaryTreeNode<KeyValuePair<TKey, TValue>> t, out bool removed)
+        {
+            if (t == null)
+            {
+                removed = false;
+                return null;
+            }
+            if (t.Data.Key.CompareTo(key) == 0)
+            {
+                KeyValuePair<TKey, TValue> min;
+                if (t.LeftChild == null || t.RightChild == null)
+                {
+                    removed = true;
+                    return t.LeftChild == t.RightChild ? null : (t.RightChild == null ? t.LeftChild : t.RightChild); 
+                }
+                
+                BinaryTreeNode<KeyValuePair<TKey, TValue>> minTree = RemoveMininumKey(t.RightChild, out min);
+                removed = true;
+                return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(min, t.LeftChild, minTree); 
+            }
+
+            else if (t.Data.Key.CompareTo(key) < 0)
+            {
+                if (t.RightChild == null)
+                {
+                    removed = false;
+                    return t;
+                } 
+                // t.key is less
+                return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, t.LeftChild, Remove(key, t.RightChild, out removed));
+            }
+            else
+            {
+                if (t.LeftChild == null)
+                {
+                    removed = false;
+                    return t.RightChild;
+                }
+                return new BinaryTreeNode<KeyValuePair<TKey, TValue>>(t.Data, Remove(key, t.LeftChild, out removed), t.RightChild);
+            }
+        }
+
+        /// <summary>
+        /// removes something from a dictionary
+        /// </summary>
+        /// <param name="k"></param>
+        /// <returns>returns whether removed</returns>
+        public bool Remove(TKey k)
+        {
+            CheckKey(k);
+            bool removed = false;
+            _elements = Remove(k, _elements, out removed);
+            return removed;
+        }
 
         /// <summary>
         /// Gets a drawing of the underlying binary search tree.

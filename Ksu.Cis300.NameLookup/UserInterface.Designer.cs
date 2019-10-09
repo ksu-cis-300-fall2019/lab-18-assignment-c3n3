@@ -37,6 +37,7 @@
             this.uxName = new System.Windows.Forms.TextBox();
             this.uxNameLabel = new System.Windows.Forms.Label();
             this.uxOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.uxRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // uxOpen
@@ -119,11 +120,22 @@
             this.uxNameLabel.TabIndex = 40;
             this.uxNameLabel.Text = "Name:";
             // 
+            // uxRemove
+            // 
+            this.uxRemove.Location = new System.Drawing.Point(290, 224);
+            this.uxRemove.Name = "uxRemove";
+            this.uxRemove.Size = new System.Drawing.Size(91, 64);
+            this.uxRemove.TabIndex = 48;
+            this.uxRemove.Text = "Remove";
+            this.uxRemove.UseVisualStyleBackColor = true;
+            this.uxRemove.Click += new System.EventHandler(this.UxRemove_Click);
+            // 
             // UserInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 241);
+            this.ClientSize = new System.Drawing.Size(393, 300);
+            this.Controls.Add(this.uxRemove);
             this.Controls.Add(this.uxOpen);
             this.Controls.Add(this.uxRank);
             this.Controls.Add(this.uxRankLabel);
@@ -150,6 +162,7 @@
         private System.Windows.Forms.TextBox uxName;
         private System.Windows.Forms.Label uxNameLabel;
         private System.Windows.Forms.OpenFileDialog uxOpenDialog;
+        private System.Windows.Forms.Button uxRemove;
     }
 }
 
